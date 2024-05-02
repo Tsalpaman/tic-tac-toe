@@ -1,0 +1,144 @@
+def board():
+    for m in matrix:
+        print("+---+---+---+")
+        for n in m:
+            print(n, end="")
+        print("")
+    print("+---+---+---+")
+    print("")
+
+
+def print_board(x, y, z, p):
+    matrix[x].pop(y)
+    matrix[x].insert(y, p)
+    numlist[x].pop(y)
+    numlist[x].insert(y, z)
+    board()
+    print("")
+
+
+def win_check():
+    return (numlist[0][0] != numlist[0][1] or numlist[0][1] != numlist[0][2]) and \
+        (numlist[1][0] != numlist[1][1] or numlist[1][1] != numlist[1][2]) and \
+        (numlist[2][0] != numlist[2][1] or numlist[2][1] != numlist[2][2]) and \
+        (numlist[0][0] != numlist[1][0] or numlist[1][0] != numlist[2][0]) and \
+        (numlist[0][1] != numlist[1][1] or numlist[1][1] != numlist[2][1]) and \
+        (numlist[0][2] != numlist[1][2] or numlist[1][2] != numlist[2][2]) and \
+        (numlist[0][0] != numlist[1][1] or numlist[1][1] != numlist[2][2]) and \
+        (numlist[2][0] != numlist[1][1] or numlist[1][1] != numlist[0][2])
+
+
+matrix = [  # Numbered positions
+    ["| 1 ", "| 2 ", "| 3 |"],
+    ["| 4 ", "| 5 ", "| 6 |"],
+    ["| 7 ", "| 8 ", "| 9 |"]
+]
+
+
+# Numbers different from 1 and 2 at the beginning. Numlist go respectively with matrix
+numlist = [
+    [10, 11, 12],
+    [13, 14, 15],
+    [16, 17, 18]
+]
+nums = []
+cnt = 0
+
+
+# While there aren't tree 1 or tree 2 in a row
+def play():
+    global cnt
+    print("Player 1: X, Player 2: O")
+    print("")
+    while True:
+        p1 = (input("Player 1, Choose Position: ")).strip()
+        if p1.isdigit():
+            if (1 <= int(p1) <= 9) and int(p1) not in nums:
+                break
+            else:
+                print("Wrong Input: ", end=" ")
+        else:
+            print("Wrong Input: ", end=" ")
+    p1 = int(p1)
+    # Player's choice, all the combinations
+    if p1 == 1:
+        print_board(0, 0, 1, "| X ")
+    elif p1 == 2:
+        print_board(0, 1, 1, "| X ")
+    elif p1 == 3:
+        print_board(0, 2, 1, "| X |")
+    elif p1 == 4:
+        print_board(1, 0, 1, "| X ")
+    elif p1 == 5:
+        print_board(1, 1, 1, "| X ")
+    elif p1 == 6:
+        print_board(1, 2, 1, "| X |")
+    elif p1 == 7:
+        print_board(2, 0, 1, "| X ")
+    elif p1 == 8:
+        print_board(2, 1, 1, "| X ")
+    else:
+        print_board(2, 2, 1, "| X |")
+
+    nums.append(p1)  # Insert 1 in position of Player 1's choice at numlist
+    cnt += 1  # Counter for Player 1's choice
+    # If Player 1 is the winner program stops
+    if not win_check():
+        print("Winner Player 1!")
+        cnt = 0
+        return
+
+    if cnt == 9:  # If tik-tak-toe is filled program stops
+        return print("Draw")
+    # Same for Player 2
+    while True:
+        p2 = (input("Player 2, Choose Position: ")).strip()
+        if p2.isdigit():
+            if (1 <= int(p2) <= 9) and int(p2) not in nums:
+                break
+            else:
+                print("Wrong Input ", end=" ")
+        else:
+            print("Wrong Input ", end=" ")
+    p2 = int(p2)
+
+    if p2 == 1:
+        print_board(0, 0, 2, "| O ")
+    elif p2 == 2:
+        print_board(0, 1, 2, "| O ")
+    elif p2 == 3:
+        print_board(0, 2, 2, "| O |")
+    elif p2 == 4:
+        print_board(1, 0, 2, "| O ")
+    elif p2 == 5:
+        print_board(1, 1, 2, "| O ")
+    elif p2 == 6:
+        print_board(1, 2, 2, "| O |")
+    elif p2 == 7:
+        print_board(2, 0, 2, "| O ")
+    elif p2 == 8:
+        print_board(2, 1, 2, "| O ")
+    else:
+        print_board(2, 2, 2, "| O |")
+    nums.append(p2)  # Insert 2 in position of Player 2's choice at numlist
+    cnt += 1  # Counter for Player 1's choice
+
+
+def winner_p2():
+    global cnt
+    #  If counter is 0 Player 1 won, if counter is 9 is draw
+    #  so if counter is other number the winner is Player 2
+    if cnt != 0 and cnt != 9:
+        print("Nikitis o Paiktis 2!")
+
+
+def main():
+    board()
+    while win_check():
+        play()
+        if cnt == 9:
+            break
+    winner_p2()
+
+
+main()
